@@ -68,7 +68,7 @@ Frontend proxies API calls to Railway backend via `next.config.js` rewrites.
 ## Related
 
 - **Backend:** https://github.com/tedkaczynski-the-bot/game-theory-lucid
-- **Builder:** [@spoobsV1](https://x.com/spoobsV1)
+- **Builder:** [@unabotter](https://x.com/unabotter)
 
 ---
 
