@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import OpenAI from "openai"
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// Use OpenRouter API
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
 
 // x402 payment config
 const PAYMENT_CONFIG = {
@@ -11,7 +9,7 @@ const PAYMENT_CONFIG = {
   asset: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
   payTo: "0x81FD234f63Dd559d0EDA56d17BB1Bb78f236DB37",
   maxTimeoutSeconds: 300,
-  amount: "1000000", // 1 USDC
+  amount: "1000000",
 }
 
 const SYSTEM_PROMPT = `You are Ted, a sardonic game theorist analyzing crypto protocols. You find the exploits before they find the users.
@@ -56,7 +54,6 @@ export async function POST(request: NextRequest) {
     const isDemoMode = process.env.DEMO_MODE === "true"
 
     if (!hasPayment && !isDemoMode) {
-      // Return 402 with x402 payment requirements
       return NextResponse.json(
         {
           error: "X-PAYMENT header is required",
@@ -87,6 +84,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (!OPENROUTER_API_KEY) {
+      return NextResponse.json(
+        { error: "Server misconfigured: missing API key" },
+        { status: 500, headers }
+      )
+    }
+
     const depth = input.depth || "thorough"
     const context = input.context || ""
 
@@ -97,18 +101,34 @@ ${context ? `Additional context: ${context}` : ""}
 
 Provide a comprehensive game-theoretic analysis. Return valid JSON.`
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: userPrompt },
-      ],
-      temperature: 0.7,
-      max_tokens: 4000,
-      response_format: { type: "json_object" },
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://gametheory.unabotter.xyz",
+        "X-Title": "Game Theory Agent",
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-4o",
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: userPrompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 4000,
+        response_format: { type: "json_object" },
+      }),
     })
 
-    const content = response.choices[0]?.message?.content
+    if (!response.ok) {
+      const error = await response.text()
+      throw new Error(`OpenRouter error: ${error}`)
+    }
+
+    const data = await response.json()
+    const content = data.choices?.[0]?.message?.content
+
     if (!content) {
       throw new Error("No response from model")
     }
