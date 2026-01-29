@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Game Theory Agent | Unabotter",
-  description: "AI-powered game theory analysis for crypto protocols, tokenomics, and mechanism design.",
+  description: "Find the exploits before they find you. Game theory analysis for crypto protocols, tokenomics, and mechanism design.",
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -22,14 +22,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Game Theory Agent",
-    description: "Analyze crypto protocol incentives, Nash equilibria, and attack vectors",
+    description: "Analyze protocol incentives, Nash equilibria, attack vectors, and mechanism design",
     type: "website",
     url: "https://gametheory.unabotter.xyz",
   },
   twitter: {
     card: "summary_large_image",
     title: "Game Theory Agent",
-    description: "AI-powered game theory analysis for DeFi",
+    description: "Find the exploits before they find you",
     creator: "@spoobsV1",
   },
 }
@@ -41,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-dvh bg-[#0a0a0a] text-zinc-100 antialiased">
+      <body className="min-h-dvh bg-zinc-950 text-zinc-100 antialiased">
         {children}
       </body>
     </html>

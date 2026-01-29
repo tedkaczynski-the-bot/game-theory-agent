@@ -1,52 +1,58 @@
 import { NextResponse } from "next/server"
 
-// x402 Discovery Document
+// x402 Discovery Document for x402scan marketplace
 // https://github.com/Merit-Systems/x402scan/blob/main/docs/DISCOVERY.md
 
 export async function GET() {
+  const baseUrl = "https://gametheory.unabotter.xyz"
+  
   const discoveryDocument = {
     version: 1,
     resources: [
-      "https://gametheory.unabotter.xyz/api/analyze",
+      `${baseUrl}/entrypoints/analyze/invoke`,
+      `${baseUrl}/entrypoints/tokenomics/invoke`,
+      `${baseUrl}/entrypoints/governance/invoke`,
+      `${baseUrl}/entrypoints/mev/invoke`,
+      `${baseUrl}/entrypoints/design/invoke`,
     ],
     // Ownership proof: sign origin URL with payTo private key
-    // To generate: sign("https://gametheory.unabotter.xyz") with deployer wallet
+    // Message signed: "https://gametheory.unabotter.xyz"
     ownershipProofs: [
-      // Will be added after deployment - sign origin with deployer key
+      // TODO: Generate by signing origin with deployer wallet
+      // const signature = await wallet.signMessage("https://gametheory.unabotter.xyz")
     ],
     instructions: `# Game Theory Agent
 
-Specialized AI agent for crypto protocol game theory analysis.
+Protocol incentive analysis by Ted. Find the exploits before they find you.
 
 ## Capabilities
 
-- **Player Analysis**: Identify rational actors and incentive structures
-- **Strategy Mapping**: Map possible strategies and payoff matrices
-- **Equilibrium Detection**: Find Nash equilibria and Pareto optimal outcomes
-- **Risk Assessment**: Identify economic attacks, collusion, MEV extraction
-- **Recommendations**: Actionable insights for protocol designers
+### 🎯 Protocol Analysis ($1.00)
+Full game theory analysis. Identifies players, strategies, equilibria, attack vectors.
 
-## Pricing
+### 🪙 Tokenomics Audit ($1.50)
+Deep dive: supply dynamics, distribution, death spiral risk, sustainability.
 
-- **Cost**: 0.1 USDC per analysis
-- **Network**: Base (mainnet)
-- **Payment**: x402 HTTP-native payments
+### 🗳️ Governance Analysis ($0.75)
+Attack vectors: plutocracy, flash loans, bribes, delegation risks.
 
-## Usage
+### ⚡ MEV Analysis ($0.50)
+Frontrunning, sandwich attacks, transaction ordering games.
 
-POST to /api/analyze with:
-\`\`\`json
-{
-  "scenario": "Analyze the game theory of...",
-  "context": "Optional additional context",
-  "focusAreas": ["incentives", "attacks", "equilibria"]
-}
-\`\`\`
+### 🔧 Mechanism Design ($2.00)
+Design incentive-compatible systems with desired equilibria.
+
+## Payment
+
+- **Network:** Base (mainnet)
+- **Asset:** USDC (0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913)
+- **Protocol:** x402 HTTP-native payments
+- **Facilitator:** https://x402.org/facilitator
 
 ## Contact
 
-- **Builder**: @spoobsV1 on X
-- **ENS**: unabotter.base.eth
+- **Twitter:** @spoobsV1
+- **ENS:** unabotter.base.eth
 `,
   }
 
