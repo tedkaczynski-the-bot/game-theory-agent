@@ -2,8 +2,27 @@
 
 import { useState } from "react"
 
+interface Field {
+  name: string
+  label: string
+  type: "text" | "textarea" | "select"
+  required: boolean
+  placeholder?: string
+  options?: string[]
+  default?: string
+}
+
+interface Entrypoint {
+  key: string
+  name: string
+  description: string
+  price: string
+  icon: string
+  fields: Field[]
+}
+
 // Entrypoint definitions matching the Lucid agent
-const ENTRYPOINTS = [
+const ENTRYPOINTS: Entrypoint[] = [
   {
     key: "analyze",
     name: "Protocol Analysis",
@@ -71,7 +90,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("analyze")
   const [formData, setFormData] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<{ output?: unknown; error?: string } | null>(null)
+  const [result, setResult] = useState<{ output?: Record<string, unknown>; error?: string } | null>(null)
 
   const activeEntrypoint = ENTRYPOINTS.find((e) => e.key === activeTab)!
 
