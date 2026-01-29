@@ -193,9 +193,9 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-6 items-stretch">
           {/* Input Panel */}
-          <div className="border border-[var(--border)] bg-[var(--bg-elevated)]">
+          <div className="border border-[var(--border)] bg-[var(--bg-elevated)] flex flex-col">
             <div className="border-b border-[var(--border)] px-4 py-3 flex items-center justify-between">
               <div>
                 <h2 className="text-[var(--accent)] font-bold tracking-wider">{activeEntrypoint.name}</h2>
@@ -261,12 +261,12 @@ export default function Home() {
           </div>
 
           {/* Output Panel */}
-          <div className="border border-[var(--border)] bg-[var(--bg-elevated)]">
+          <div className="border border-[var(--border)] bg-[var(--bg-elevated)] flex flex-col">
             <div className="border-b border-[var(--border)] px-4 py-3">
               <h2 className="text-[var(--text-muted)] font-bold tracking-wider">OUTPUT</h2>
             </div>
             
-            <div className="p-4 min-h-[400px]">
+            <div className="p-4 flex-1 flex flex-col">
               {!result && !loading && (
                 <div className="text-[var(--text-dim)] text-sm">
                   <pre className="whitespace-pre-wrap">
