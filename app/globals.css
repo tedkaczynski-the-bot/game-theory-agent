@@ -3,60 +3,140 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #fafafa;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-  --border: #27272a;
-  --accent: #3b82f6;
-  --accent-foreground: #fafafa;
+  --bg: #0a0f0a;
+  --bg-elevated: #0f1a0f;
+  --bg-surface: #141f14;
+  --border: #1a2e1a;
+  --border-active: #2d4a2d;
+  --text: #c8d9c8;
+  --text-muted: #6b8a6b;
+  --text-dim: #3d5a3d;
+  --accent: #4ade80;
+  --accent-dim: #22c55e;
+  --warning: #eab308;
+  --danger: #ef4444;
+}
+
+* {
+  border-radius: 0 !important;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-/* Custom scrollbar */
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* Brutalist scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-
 ::-webkit-scrollbar-track {
-  background: var(--muted);
+  background: var(--bg);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  border-radius: 4px;
+  background: var(--border-active);
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--foreground);
+  background: var(--text-muted);
 }
 
-/* Animations */
-@keyframes pulse-slow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+/* Terminal cursor blink */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.cursor-blink::after {
+  content: '█';
+  animation: blink 1s step-end infinite;
+  color: var(--accent);
 }
 
-.animate-pulse-slow {
-  animation: pulse-slow 3s ease-in-out infinite;
+/* Scan line effect (subtle) */
+.scanlines {
+  position: relative;
+}
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+}
+
+/* Input styling */
+input, textarea, select {
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  padding: 0.75rem !important;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none !important;
+  border-color: var(--accent) !important;
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-dim) !important;
+}
+
+/* Button */
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /* Code blocks */
-pre {
-  background: var(--muted);
-  border-radius: 0.5rem;
-  padding: 1rem;
-  overflow-x: auto;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.875rem;
+pre, code {
+  font-family: inherit;
+  background: var(--bg);
+  border: 1px solid var(--border);
 }
 
-code {
-  font-family: 'JetBrains Mono', monospace;
+/* Glitch effect for headers */
+.glitch {
+  position: relative;
+}
+.glitch:hover::before,
+.glitch:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+.glitch:hover::before {
+  animation: glitch-1 0.2s linear;
+  color: var(--accent);
+  z-index: -1;
+}
+@keyframes glitch-1 {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
 }
