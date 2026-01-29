@@ -2,16 +2,17 @@
 const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
-    // Only proxy in production (Vercel) - Railway handles its own API
-    if (process.env.VERCEL) {
-      return [
-        {
-          source: '/api/entrypoints/:path*',
-          destination: 'https://game-theory-agent-production.up.railway.app/api/entrypoints/:path*',
-        },
-      ]
-    }
-    return []
+    // Proxy to Railway Lucid agent backend
+    return [
+      {
+        source: '/entrypoints/:path*',
+        destination: 'https://game-theory-agent-production.up.railway.app/entrypoints/:path*',
+      },
+      {
+        source: '/.well-known/agent-card.json',
+        destination: 'https://game-theory-agent-production.up.railway.app/.well-known/agent-card.json',
+      },
+    ]
   },
 }
 
